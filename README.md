@@ -24,6 +24,6 @@ The react component requires a handful of props:
 -  onOptionLabelClick: React.PropTypes.func
 
 # Credits, etc.
-Fluxible React Select uses [Jed Watson's react-select components] like Option, Value, and re-uses parts of his Select component as well. The main difference there is that this "fluxible" version removes handling it's own state. This is instead managed via props, which the user passes in. This allows a more flexible interface if you want to use a flux-like library along with a React multi-select component.
+Fluxible React Select uses [Jed Watson's react-select](https://github.com/JedWatson/react-select) components like Option, Value, and re-uses parts of his Select component as well. The main difference there is that this "fluxible" version removes handling it's own state. This is instead managed via props, which the user passes in. This allows a more flexible interface if you want to use a flux-like library along with a React multi-select component.
 
 
