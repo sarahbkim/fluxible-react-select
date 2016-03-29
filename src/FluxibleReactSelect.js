@@ -2,7 +2,7 @@ import React from 'react';
 import { render, findDOMNode } from 'react-dom'
 import { buildLoading, buildArrow, buildClearBtn, buildSelected,  buildMenuOuter, buildInput, buildHiddenInputElem } from './Subcomponents'
 
-let FluxibleReactSelect = React.createClass({
+const FluxibleReactSelect = React.createClass({
   displayName: 'FluxibleReactSelect',
 
   getInitialState: function() {
@@ -291,4 +291,4 @@ FluxibleReactSelect.propTypes = {
   optionRenderer: React.PropTypes.func,
   onOptionLabelClick: React.PropTypes.func
 }
-module.exports = FluxibleReactSelect
+export default FluxibleReactSelect;
