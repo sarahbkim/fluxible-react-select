@@ -126,7 +126,7 @@ function buildMenuList() {
     }
     let classNames = this._createStringFromHash(optClassState);
 
-    return React.createElement(Option, {
+    return React.createElement(this.props.optionComponent, {
       key: 'option-' + op.label + i, // TOD
       className: classNames, 
       renderFunc: valueRenderer,
@@ -136,7 +136,7 @@ function buildMenuList() {
       mouseDown: this.onOptionLabelClick,
       mouseLeave: this._handleMouseLeave
     }); 
-  });
+  }, this);
   return opts;
 }
 

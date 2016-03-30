@@ -1,4 +1,5 @@
 import React from 'react';
+import Option from 'react-select/lib/Option' 
 import { render, findDOMNode } from 'react-dom'
 import { buildLoading, buildArrow, buildClearBtn, buildSelected,  buildMenuOuter, buildInput, buildHiddenInputElem } from './subcomponents'
 
@@ -16,7 +17,8 @@ const FluxibleReactSelect = React.createClass({
   getDefaultProps: function() {
     return {
       labelKey: 'label',
-      valueKey: 'value'
+      valueKey: 'value',
+      optionComponent: Option
     }
   },
   componentWillMount: function() {
