@@ -348,7 +348,7 @@ function buildArrow() {
 
 function buildClearBtn() {
   // TODO: this isFetching shouldn't really be from props...
-  if (this.props.values.length > 0 && this._isFetching()) {
+  if (this.props.values.length > 0 && !this._isFetching()) {
     return _react2.default.createElement('span', { className: 'Select-clear-zone',
       ref: 'clear-btn',
       title: this.props.clearAllText,

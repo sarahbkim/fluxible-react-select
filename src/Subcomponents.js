@@ -112,12 +112,11 @@ export function buildMenuOuter() {
 }
 
 function buildMenuList() {
-  let valueRenderer = this.props.optionRenderer || this.renderLabel;
-  let filteredOpts = this.filterSelectedFromOptions(this.props.values, this.props.options.data)
+  let valueRenderer = this.props.optionRenderer || this.renderLabel,
+      filteredOpts = this.filterSelectedFromOptions(this.props.values, this.props.options.data),
+      focused = this.state.focusedOption ? this.state.focusedOption[this.props.valueKey] : null;
 
-  let focused = this.state.focusedOption ? this.state.focusedOption[this.props.valueKey] : null;
-
-  let opts = filteredOpts.map((op, i) => {
+  let opts = filteredOpts.map((op) => {
 
     let isFocused = focused ? focused === op[this.props.valueKey] : false
     let optClassState = {
@@ -125,18 +124,21 @@ function buildMenuList() {
       'is-focused': isFocused
     }
     let classNames = this._createStringFromHash(optClassState);
+    let onOptionLabelClick = this.onOptionLabelClick.bind(this, op)
+    let onMouseEnter = this._handleMouseEnter.bind(this, op)
+    let onMouseLeave = this._handleMouseLeave.bind(this, op)
 
     return React.createElement(this.props.optionComponent, {
-      key: 'option-' + op.label + i, // TOD
+      key: 'option-' + op.label,
       className: classNames, 
       renderFunc: valueRenderer,
       ref: 'option',
       option: op,
-      mouseEnter: this._handleMouseEnter,
-      mouseDown: this.onOptionLabelClick,
-      mouseLeave: this._handleMouseLeave
+      mouseEnter: onMouseEnter,
+      mouseDown: onOptionLabelClick,
+      mouseLeave: onMouseLeave
     }); 
-  }, this);
+  });
   return opts;
 }
 
