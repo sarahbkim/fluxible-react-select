@@ -348,7 +348,7 @@ function buildArrow() {
 
 function buildClearBtn() {
   // TODO: this isFetching shouldn't really be from props...
-  if (this.props.values.length > 0 && !this._isFetching()) {
+  if (this.props.values.length > 0 && this._isFetching()) {
     return _react2.default.createElement('span', { className: 'Select-clear-zone',
       ref: 'clear-btn',
       title: this.props.clearAllText,
@@ -427,12 +427,11 @@ function buildMenuOuter() {
 function buildMenuList() {
   var _this2 = this;
 
-  var valueRenderer = this.props.optionRenderer || this.renderLabel;
-  var filteredOpts = this.filterSelectedFromOptions(this.props.values, this.props.options.data);
+  var valueRenderer = this.props.optionRenderer || this.renderLabel,
+      filteredOpts = this.filterSelectedFromOptions(this.props.values, this.props.options.data),
+      focused = this.state.focusedOption ? this.state.focusedOption[this.props.valueKey] : null;
 
-  var focused = this.state.focusedOption ? this.state.focusedOption[this.props.valueKey] : null;
-
-  var opts = filteredOpts.map(function (op, i) {
+  var opts = filteredOpts.map(function (op) {
 
     var isFocused = focused ? focused === op[_this2.props.valueKey] : false;
     var optClassState = {
@@ -440,18 +439,21 @@ function buildMenuList() {
       'is-focused': isFocused
     };
     var classNames = _this2._createStringFromHash(optClassState);
+    var onOptionLabelClick = _this2.onOptionLabelClick.bind(_this2, op);
+    var onMouseEnter = _this2._handleMouseEnter.bind(_this2, op);
+    var onMouseLeave = _this2._handleMouseLeave.bind(_this2, op);
 
     return _react2.default.createElement(_this2.props.optionComponent, {
-      key: 'option-' + op.label + i, // TOD
+      key: 'option-' + op.label,
       className: classNames,
       renderFunc: valueRenderer,
       ref: 'option',
       option: op,
-      mouseEnter: _this2._handleMouseEnter,
-      mouseDown: _this2.onOptionLabelClick,
-      mouseLeave: _this2._handleMouseLeave
+      mouseEnter: onMouseEnter,
+      mouseDown: onOptionLabelClick,
+      mouseLeave: onMouseLeave
     });
-  }, this);
+  });
   return opts;
 }
 

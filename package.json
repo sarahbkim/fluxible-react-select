@@ -1,6 +1,6 @@
 {
   "name": "fluxible-react-select",
-  "version": "1.4.4",
+  "version": "1.4.6",
   "description": "A version of react-select that allows more flexibility and control. You can use this with redux or flux",
   "main": "fluxible-react-select.js",
   "keywords": [
