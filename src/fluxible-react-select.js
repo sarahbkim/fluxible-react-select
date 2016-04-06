@@ -79,6 +79,9 @@ const FluxibleReactSelect = React.createClass({
     //FIXME: not sure if i need state here? 
     this.setState({isFetching: newProps.options.isFetching})
     this.setState({isSuccess: newProps.options.isSuccess})
+    if (newProps.options.isSuccess && !newProps.options.isFetching) {
+      this.setState({isOpen: true})
+    }
   },
   renderLabel: function(op) {
     return op[this.props.labelKey]
