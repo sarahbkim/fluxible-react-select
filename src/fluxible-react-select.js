@@ -57,6 +57,9 @@ const FluxibleReactSelect = React.createClass({
       document.removeEventListener('click', this._clickedOutside)
     }
   },
+  _clearInputValue: function() {
+    this.setState({inputValue: null});
+  },
   componentDidMount: function() {
     this._listenForClickedOutside();
   },
@@ -86,7 +89,7 @@ const FluxibleReactSelect = React.createClass({
   onOptionLabelClick: function(obj, e) {
     let selected = this._sanitizeObj(obj);
     this.props.addSelect(selected);
-    this.setState({inputValue: null})
+    this._clearInputValue();
   },
   filterSelectedFromOptions: function(selected, options) {
     let key = this.props.labelKey 
@@ -133,6 +136,8 @@ const FluxibleReactSelect = React.createClass({
 				// enter
 				if (!this.state.isOpen) return;
 				this._selectFocusedOption();
+        this.props.addSelect(this.state.focusedOption);
+        this._clearInputValue()
 				break;
 //			case 27:
 //				// escape
