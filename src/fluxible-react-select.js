@@ -43,37 +43,56 @@ const FluxibleReactSelect = React.createClass({
       }
     } 
   },
-  _listenForClickedOutside: function (cb) {
-    if (!document.addEventListener && document.attachEvent) {
-      document.attachEvent('onclick', this._clickedOutside)
-    } else {
-      document.addEventListener('click', this._clickedOutside)
+  _clickedInside: function(event) {
+    let controlElem = findDOMNode(this.refs.selectControlElement)
+    if (controlElem) {
+      let eventInsideElem = this._clickedInsideElement(controlElem, event);
+      if (eventInsideElem) {
+        this.setState({ isOpen: true });
+      }
     }
   },
-  _unbindListenerForClickedOutside: function(cb) {
+  _clickedOutsideElement: function (element, event) {
+    let eventTarget = event.target ? event.target : event.srcElement
+    while (eventTarget != null) {
+      if (eventTarget == element) return false
+      eventTarget = eventTarget.offsetParent
+    }
+    return true
+  },
+  _clickedInsideElement: function (element, event) {
+    let eventTarget = event.target ? event.target : event.srcElement
+    while (eventTarget != null) {
+      if (eventTarget == element) return true
+    }
+  },
+  _listenForClicked: function (cb) {
+    if (!document.addEventListener && document.attachEvent) {
+      document.attachEvent('onclick', this._clickedOutside)
+      document.attachEvent('onclick', this._clickedInside)
+    } else {
+      document.addEventListener('click', this._clickedOutside)
+      document.addEventListener('onclick', this._clickedInside)
+    }
+  },
+  _unbindListenerForClicked: function(cb) {
     if (!document.removeEventListener && document.detachEvent) {
       document.detachEvent('onclick', this._clickedOutside) 
+      document.detachEvent('onclick', this._clickedInside)
     } else {
       document.removeEventListener('click', this._clickedOutside)
+      document.removeEventListener('onclick', this._clickedInside)
     }
   },
   _clearInputValue: function() {
     this.setState({inputValue: null});
   },
   componentDidMount: function() {
-    this._listenForClickedOutside();
+    this._listenForClicked();
   },
   componentWillUnmount: function() {
-    this._unbindListenerForClickedOutside();
+    this._unbindListenerForClicked();
     this.setState({isOpen: false});
-  },
-  _clickedOutsideElement: function (element, event) {
-    let eventTarget = event.target ? event.target : evetn.srcElement
-    while (eventTarget != null) {
-      if (eventTarget == element) return false
-      eventTarget = eventTarget.offsetParent
-    }
-    return true
   },
   componentWillReceiveProps: function(newProps) {
     //FIXME: not sure if i need state here? 
