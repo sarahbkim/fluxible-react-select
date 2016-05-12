@@ -211,11 +211,28 @@ const FluxibleReactSelect = React.createClass({
       this._selectFocusedOption(idx+1)
     }
   },
+  _debouncedChange: function(name) {
+    let dfd = $.Deferred(),
+        timerId = this.timerId,
+        self = this;
+
+    if (timerId) { clearTimeout(timerId); }
+    timerId = setTimeout((function(innerName) {
+      return function() { dfd.resolve(innerName);}
+    })(name), 500);
+
+    this.timerId = timerId;
+
+    return dfd.promise();
+  },
   _handleInputChange: function(e) {
     //TODO: loading state, should make a call to function from props
     let input = e.target.value
     this.setState({inputValue: input})
-    this.props.loadOptions(input)
+
+    this._debouncedChange(input).then((result) => {
+      this.props.loadOptions(result);
+    })
   },
   _handleInputBlur: function(e) {
     this.setState({isFocused: true, isOpen: true})  
