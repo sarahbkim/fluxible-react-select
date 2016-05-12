@@ -238,7 +238,7 @@ const FluxibleReactSelect = React.createClass({
     if (timerId) { clearTimeout(timerId); }
     timerId = setTimeout((function(innerName) {
       return function() { dfd.resolve(innerName);}
-    })(name), 500);
+    })(name), 100);
 
     this.timerId = timerId;
 
