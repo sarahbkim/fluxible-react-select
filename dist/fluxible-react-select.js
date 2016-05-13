@@ -57,37 +57,56 @@ var FluxibleReactSelect = _react2.default.createClass({
       }
     }
   },
-  _listenForClickedOutside: function _listenForClickedOutside(cb) {
-    if (!document.addEventListener && document.attachEvent) {
-      document.attachEvent('onclick', this._clickedOutside);
-    } else {
-      document.addEventListener('click', this._clickedOutside);
+  _clickedInside: function _clickedInside(event) {
+    var controlElem = (0, _reactDom.findDOMNode)(this.refs.selectControlElement);
+    if (controlElem) {
+      var eventInsideElem = this._clickedInsideElement(controlElem, event);
+      if (eventInsideElem) {
+        this.setState({ isOpen: true });
+      }
     }
   },
-  _unbindListenerForClickedOutside: function _unbindListenerForClickedOutside(cb) {
+  _clickedOutsideElement: function _clickedOutsideElement(element, event) {
+    var eventTarget = event.target ? event.target : event.srcElement;
+    while (eventTarget != null) {
+      if (eventTarget == element) return false;
+      eventTarget = eventTarget.offsetParent;
+    }
+    return true;
+  },
+  _clickedInsideElement: function _clickedInsideElement(element, event) {
+    var eventTarget = event.target ? event.target : event.srcElement;
+    while (eventTarget != null) {
+      if (eventTarget == element) return true;
+    }
+  },
+  _listenForClicked: function _listenForClicked(cb) {
+    if (!document.addEventListener && document.attachEvent) {
+      document.attachEvent('onclick', this._clickedOutside);
+      document.attachEvent('onclick', this._clickedInside);
+    } else {
+      document.addEventListener('click', this._clickedOutside);
+      document.addEventListener('onclick', this._clickedInside);
+    }
+  },
+  _unbindListenerForClicked: function _unbindListenerForClicked(cb) {
     if (!document.removeEventListener && document.detachEvent) {
       document.detachEvent('onclick', this._clickedOutside);
+      document.detachEvent('onclick', this._clickedInside);
     } else {
       document.removeEventListener('click', this._clickedOutside);
+      document.removeEventListener('onclick', this._clickedInside);
     }
   },
   _clearInputValue: function _clearInputValue() {
     this.setState({ inputValue: null });
   },
   componentDidMount: function componentDidMount() {
-    this._listenForClickedOutside();
+    this._listenForClicked();
   },
   componentWillUnmount: function componentWillUnmount() {
-    this._unbindListenerForClickedOutside();
+    this._unbindListenerForClicked();
     this.setState({ isOpen: false });
-  },
-  _clickedOutsideElement: function _clickedOutsideElement(element, event) {
-    var eventTarget = event.target ? event.target : evetn.srcElement;
-    while (eventTarget != null) {
-      if (eventTarget == element) return false;
-      eventTarget = eventTarget.offsetParent;
-    }
-    return true;
   },
   componentWillReceiveProps: function componentWillReceiveProps(newProps) {
     //FIXME: not sure if i need state here?
@@ -234,7 +253,7 @@ var FluxibleReactSelect = _react2.default.createClass({
       return function () {
         dfd.resolve(innerName);
       };
-    }(name), 500);
+    }(name), 100);
 
     this.timerId = timerId;
 
